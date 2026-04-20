@@ -1,0 +1,902 @@
+/* =====================================================
+   JCO MEDIA — PORTFOLIO  |  styles.css
+   ===================================================== */
+:root {
+  --sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+        "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Times New Roman", Times, serif;
+  --bg: #000;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--sf);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html { overflow-x: clip; scroll-behavior: smooth; }
+body { overflow-x: clip; }
+
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+/* Shared big section title (used by EXPERIENCE, SOFTWARES & AI TOOLS, WHAT I DO) */
+.section-title-main {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #fff;
+  line-height: 1.05;
+}
+
+/* =====================================================
+   HERO
+   ===================================================== */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 2vh;
+  overflow: hidden;
+}
+
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #ffffff 0%,
+    #ffffff 30%,
+    #d8d8d8 56%,
+    #6a6a6a 82%,
+    #000000 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CSS custom props for hero geometry ─────────────────────────────
+   PORTFOLIO font = 16.5vw, line-height 0.9, scaleY 1.35
+   title rendered height ≈ 16.5vw × 0.9 × 1.35 = 20.05vw
+   Avatar width clamped so it doesn't get huge on wide screens.
+   Avatar center locked to PORTFOLIO bottom edge.
+──────────────────────────────────────────────────────────────────── */
+:root {
+  --title-h:      calc(16.5vw * 0.9 * 1.35);
+  --avatar-w:     clamp(170px, 18vw, 260px);
+  --avatar-half:  calc(var(--avatar-w) / 2);
+  --avatar-top:   calc(var(--title-h) - var(--avatar-half));
+  --stack-h:      calc(var(--title-h) + var(--avatar-half));
+}
+
+/* PORTFOLIO title stack + overlapping avatar */
+.hero-stack {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: clamp(6px, 1vw, 14px);
+  padding-left: clamp(6px, 1vw, 14px);
+  padding-right: clamp(6px, 1vw, 14px);
+  padding-bottom: 0;
+  min-height: var(--stack-h);
+}
+
+/* Elongated-vertical PORTFOLIO — scaleY is controlled by JS for rubberband effect */
+.portfolio-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: #000;
+  font-size: 16.5vw;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+  user-select: none;
+  /* scaleY starts at 1.35 (stretched); JS lerps this back to 1.0 as you scroll.
+     top origin means the text stays anchored at the top edge. */
+  transform: scaleY(1.35);
+  transform-origin: center top;
+  opacity: 1;
+  filter: none;
+  will-change: transform;
+  margin-top: 0;
+}
+
+/* CIRCULAR white halo behind avatar */
+.avatar-halo {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(var(--avatar-w) * 2.2);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, calc(var(--avatar-top) - var(--avatar-half)));
+  background: radial-gradient(circle,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,0.85) 18%,
+    rgba(255,255,255,0.55) 36%,
+    rgba(255,255,255,0.28) 54%,
+    rgba(255,255,255,0.1) 72%,
+    rgba(255,255,255,0) 92%);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  filter: blur(28px);
+}
+
+/* Avatar — PORTFOLIO bottom locked to avatar center at all screen widths */
+.profile-avatar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  /* translateY = avatar-top so avatar center sits exactly at title bottom */
+  transform: translate(-50%, var(--avatar-top));
+  width: var(--avatar-w);
+  aspect-ratio: 1 / 1;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #bbb;
+  z-index: 3;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  border: 3px solid rgba(255,255,255,0.9);
+}
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.profile-avatar.no-img {
+  background: linear-gradient(135deg, #888, #444);
+}
+
+/* Profile info (centered, right below avatar) */
+.profile-info {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  margin-top: 2px;
+  color: #000;
+  text-align: center;
+}
+.profile-name {
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  font-weight: 900;
+  color: #000;
+  margin-bottom: 2px;
+  letter-spacing: -0.02em;
+}
+.profile-role { font-size: clamp(0.95rem, 1.2vw, 1.05rem); font-weight: 600; color: #111; }
+.profile-email { font-size: clamp(0.85rem, 1vw, 0.95rem); color: #333; margin-top: 2px; }
+.open-work {
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  color: #d11;
+  font-weight: 700;
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.open-work .dot-red {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #d11;
+  border-radius: 50%;
+}
+
+.cta-button {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: 999px;
+  margin-top: 8px;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.cta-button.light {
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+.cta-button:hover { transform: scale(1.04); opacity: 0.95; }
+
+/* Hello card — emphasizes on hover */
+.hello-card {
+  position: relative;
+  z-index: 2;
+  margin-top: 1.2vh;
+  background: rgba(15,15,15,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 22px 26px;
+  width: min(720px, 88vw);
+  color: #fff;
+  transition: transform .35s cubic-bezier(.2,.7,.2,1),
+              box-shadow .35s ease,
+              border-color .35s ease;
+  cursor: default;
+}
+.hello-card:hover,
+.hello-card.touched {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 30px 80px rgba(255,255,255,0.18),
+              0 0 0 1px rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.22);
+}
+.hello-title { font-weight: 700; font-size: 1.45rem; margin-bottom: 10px; }
+.hello-text { font-size: 0.95rem; line-height: 1.55; color: rgba(255,255,255,0.85); }
+.hello-text strong { color: #fff; font-weight: 700; }
+
+/* Scroll arrows — wider, close together, slow crossfade */
+.scroll-arrows {
+  margin-top: auto;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+.arrow {
+  width: 56px;
+  height: 18px;
+  opacity: 0;
+  animation: arrowFade 2.6s ease-in-out infinite;
+}
+.arrow.a1 { animation-delay: 0s; }
+.arrow.a2 { animation-delay: 0.7s; margin-top: -8px; }
+@keyframes arrowFade {
+  0%, 100% { opacity: 0; transform: translateY(-3px); }
+  50%      { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================================================
+   EXPERIENCE
+   Layout: [year col | dot col | content col]
+   Dots horizontally aligned with year labels (both top-aligned to same baseline)
+   Line runs through dot column center, stops at last dot
+   ===================================================== */
+.experience {
+  position: relative;
+  width: 100%;
+  padding: 12vh 5vw 12vh;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.experience .section-title-main {
+  margin-bottom: 8vh;
+}
+
+.timeline {
+  position: relative;
+  /* Perfectly centered, symmetric columns ensure center alignment */
+  width: min(720px, 92vw);
+  margin: 0 auto;
+}
+
+/* Vertical line at the exact center of the timeline (between year and content) */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 18px;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255,255,255,0.2);
+}
+.timeline-line-fill {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 0;
+  background: #fff;
+  transition: height .15s linear;
+}
+
+.year-block {
+  position: relative;
+  display: grid;
+  /* Symmetric 1fr | 40px dot | 1fr — dot sits dead-center, whole timeline centers on page */
+  grid-template-columns: 1fr 40px 1fr;
+  gap: 0;
+  align-items: start;
+  margin-bottom: 40px;
+  color: rgba(255,255,255,0.2);
+  transition: color .35s ease;
+}
+.year-block.active { color: #fff; }
+
+.year-label {
+  grid-column: 1;
+  font-weight: 800;
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  text-align: right;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  padding-right: 24px;
+  /* baseline aligns with dot top */
+}
+.year-marker {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  /* Pull the dot up so its center is at the same height as the year label's cap-height */
+  padding-top: 8px;
+  position: relative;
+  z-index: 2;
+}
+.dot {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5);
+  background: #000;
+  transition: background .3s ease, border-color .3s ease, transform .3s ease;
+  box-sizing: border-box;
+}
+.year-block.active .dot {
+  background: #fff;
+  border-color: #fff;
+  transform: scale(1.1);
+}
+.year-content {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 6px;
+  padding-left: 22px;
+}
+.job-title { font-size: clamp(1.05rem, 1.4vw, 1.25rem); font-weight: 700; }
+.job-role  { font-size: clamp(0.85rem, 1vw, 0.95rem); opacity: 0.9; margin-top: 2px; font-weight: 400; line-height: 1.3; }
+
+/* =====================================================
+   TOOLS — strong horizontal white gradient band
+   ===================================================== */
+.tools-wrap {
+  position: relative;
+  width: 100%;
+  padding: 14vh 0 14vh;
+  overflow: hidden;
+}
+.tools-gradient {
+  position: absolute;
+  inset: 0;
+  /* Thick white band across the middle — extends further vertically */
+  background: linear-gradient(180deg,
+    #000 0%,
+    #000 4%,
+    #555 12%,
+    #c8c8c8 22%,
+    #ffffff 32%,
+    #ffffff 68%,
+    #c8c8c8 78%,
+    #555 88%,
+    #000 96%,
+    #000 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.tools {
+  position: relative;
+  z-index: 1;
+  padding: 0 5vw;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.tools-title {
+  color: #000;
+  margin-bottom: 7vh;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.fade-up.in-view { opacity: 1; transform: translateY(0); }
+/* Crossfade back up when scrolled past — title retreats upward */
+.fade-up.past-view {
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+}
+
+.tools-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;            /* never wrap — keep 2 rows only */
+  gap: clamp(8px, 1.2vw, 18px);
+  margin-bottom: 38px;
+}
+.tools-row:last-child { margin-bottom: 0; }
+
+.tool-card {
+  width: clamp(50px, 6vw, 90px);
+  aspect-ratio: 1 / 1;
+  height: auto;
+  background: none;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform .25s ease;
+  box-shadow: none;
+  flex-shrink: 1;
+}
+.tool-card img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+.tool-card .tool-name {
+  position: absolute;
+  bottom: -22px;
+  font-size: 0.75rem;
+  color: #000;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none;
+}
+.tool-card:hover, .tool-card.touched {
+  transform: scale(1.15);
+}
+.tool-card:hover .tool-name, .tool-card.touched .tool-name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================
+   WHAT I DO — scrollytelling
+   ===================================================== */
+.contents {
+  position: relative;
+  padding-top: 0;
+}
+.contents-title {
+  margin: 0;
+  padding: 10vh 0 2vh;
+}
+
+.scroll-section {
+  position: relative;
+  height: 350vh;
+}
+.sticky-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  /* Track goes DEAD CENTER of viewport; title/desc are absolutely placed above */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 0;
+}
+
+/* Text (title + desc + disclaimer) absolutely positioned above the centered track */
+.sticky-stage > .sub-title,
+.sticky-stage > .sub-desc,
+.sticky-stage > .sub-disclaimer {
+  position: absolute;
+  left: 50%;
+  width: min(720px, 88vw);
+  text-align: center;
+}
+/* Cards are centered at 50% viewport. Text sits in the top quarter above them. */
+.sticky-stage > .sub-title {
+  top: clamp(50px, 7vh, 100px);
+}
+.sticky-stage > .sub-desc {
+  top: calc(clamp(50px, 7vh, 100px) + clamp(44px, 5.5vh, 72px));
+}
+/* Disclaimer sits right below desc — tighter gap, well above cards */
+.sticky-stage > .sub-disclaimer {
+  top: calc(clamp(50px, 7vh, 100px) + clamp(44px, 5.5vh, 72px) + clamp(42px, 5.2vh, 66px));
+}
+
+/* Subsection title — fades up from below */
+.sub-title {
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-weight: 800;
+  margin: 0;
+  color: #fff;
+  opacity: 0;
+  transform: translate(-50%, 30px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1);
+  letter-spacing: -0.01em;
+}
+.sticky-stage.active .sub-title {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.track-wrap {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 58vh;
+  height: 58dvh;
+  /* overflow: visible so cards are NOT clipped — rounded corners stay intact */
+  overflow: visible;
+  perspective: 1600px;
+  /* Track fades from 25% to 100% as section becomes active */
+  opacity: 0.25;
+  transition: opacity .6s ease;
+}
+.sticky-stage.active .track-wrap {
+  opacity: 1;
+}
+.track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.edge {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 22%;
+  pointer-events: none;
+  z-index: 5;
+}
+.edge-left {
+  left: 0;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.95) 0%,
+    rgba(0,0,0,0.7) 40%,
+    rgba(0,0,0,0) 100%);
+}
+.edge-right {
+  right: 0;
+  background: linear-gradient(270deg,
+    rgba(0,0,0,0.95) 0%,
+    rgba(0,0,0,0.7) 40%,
+    rgba(0,0,0,0) 100%);
+}
+
+/* Cards (vertical 9:16 default) */
+.card {
+  flex: 0 0 auto;
+  width: clamp(220px, 24vw, 340px);
+  aspect-ratio: 9 / 16;
+  margin: 0 clamp(30px, 5vw, 70px);
+  background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
+  /* Very rounded like iOS app icons / reference design — stays visibly rounded at scale(1) */
+  border-radius: clamp(36px, 3.6vw, 56px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1),
+              opacity .35s ease;
+  transform: scale(0.78);
+  opacity: 0.25;
+}
+.card.is-active {
+  transform: scale(1) rotateY(0deg);
+  opacity: 1;
+  z-index: 4;
+}
+.card.is-left  { transform: scale(0.78) rotateY(22deg); opacity: 0.35; }
+.card.is-right { transform: scale(0.78) rotateY(-22deg); opacity: 0.35; }
+
+.card img, .card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* Horizontal (16:9) cards - smaller relative radius */
+.track.horizontal .card {
+  aspect-ratio: 16 / 9;
+  width: clamp(360px, 52vw, 780px);
+  border-radius: clamp(28px, 2.4vw, 40px);
+}
+.card.placeholder::after {
+  content: attr(data-label);
+  position: absolute;
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+}
+.card.placeholder img,
+.card.placeholder video { display: none; }
+
+/* Description text BELOW title, above media cards */
+.sub-desc {
+  max-width: min(720px, 88vw);
+  margin: 0;
+  font-size: clamp(0.88rem, 1.1vw, 1rem);
+  line-height: 1.7;
+  color: rgba(255,255,255,0.8);
+  opacity: 0;
+  transform: translate(-50%, 30px);
+  transition: opacity .6s ease .1s, transform .6s cubic-bezier(.2,.7,.2,1) .1s;
+}
+.sticky-stage.active .sub-desc { opacity: 1; transform: translate(-50%, 0); }
+
+.sub-disclaimer {
+  max-width: min(720px, 88vw);
+  margin: 0;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+  opacity: 0;
+  transform: translate(-50%, 30px);
+  transition: opacity .6s ease .15s, transform .6s cubic-bezier(.2,.7,.2,1) .15s;
+}
+.sticky-stage.active .sub-disclaimer { opacity: 1; transform: translate(-50%, 0); }
+
+/* =====================================================
+   FOOTER — short, white gradient, above sticky stages
+   ===================================================== */
+.footer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 50vh;
+  min-height: 50dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
+  background: #000;
+}
+.footer-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,1) 0%,
+    rgba(50,50,50,1) 8%,
+    rgba(180,180,180,1) 22%,
+    rgba(240,240,240,1) 40%,
+    #ffffff 60%,
+    #ffffff 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.footer-content {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 5vw 3vh;
+  width: 100%;
+  /* Crossfade up animation */
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.footer-content.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+.footer-content.past-view {
+  opacity: 0;
+  transform: translateY(-40px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.footer-tag {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: #000;
+  font-weight: 700;
+  margin-top: 6vh;
+}
+.footer-email {
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  color: #333;
+  margin-top: 6px;
+}
+.send-btn {
+  margin-top: 18px;
+  background: #000;
+  color: #fff;
+  border: none;
+}
+.back-to-top {
+  margin-top: 4vh;
+  background: rgba(0,0,0,0.08);
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.18);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform .2s ease, background .2s ease;
+}
+.back-to-top svg { width: 14px; height: 14px; }
+.back-to-top:hover { transform: scale(1.05); background: rgba(0,0,0,0.15); }
+.copyright {
+  margin-top: 3vh;
+  font-size: 0.78rem;
+  color: rgba(0,0,0,0.55);
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+@media (max-width: 720px) {
+  /* Avatar top edge = middle of PORTFOLIO text = title-h * 0.5
+     stack-h = avatar-top + avatar full height */
+  :root {
+    --title-h:     calc(15.5vw * 0.9 * 1.6);
+    --avatar-w:    42vw;
+    --avatar-half: calc(var(--avatar-w) / 2);
+    --avatar-top:  calc(var(--title-h) * 0.5);
+    --stack-h:     calc(var(--avatar-top) + var(--avatar-w));
+  }
+
+  .portfolio-title {
+    font-size: 15.5vw;
+    transform: scaleY(1.6);
+  }
+  .avatar-halo {
+    width: calc(var(--avatar-w) * 2.2);
+    filter: blur(18px);
+  }
+  .profile-avatar {
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.85);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.4);
+  }
+
+  /* Tight gap between avatar and name */
+  .profile-info {
+    margin-top: clamp(4px, 0.4vh, 8px);
+  }
+
+  .hero-stack {
+    padding-top: clamp(6px, 1vw, 14px);
+    padding-left: clamp(6px, 1vw, 14px);
+    padding-right: clamp(6px, 1vw, 14px);
+    padding-bottom: 0;
+    min-height: var(--stack-h);
+  }
+
+  .hero-gradient {
+    background: linear-gradient(180deg,
+      #ffffff 0%,
+      #ffffff 36%,
+      #c8c8c8 60%,
+      #555 82%,
+      #000 100%);
+  }
+  .arrow { width: 44px; height: 14px; }
+
+  /* Experience mobile — reorganize so line is centered through dots */
+  .timeline-line { left: 110px; }
+  .year-block {
+    grid-template-columns: 90px 40px 1fr;
+    margin-bottom: 32px;
+    align-items: center; /* vertically center all three columns so year and dot line up */
+  }
+  .year-label {
+    font-size: 1.6rem;
+    padding-right: 16px;
+    /* Align year text baseline with dot center */
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0;
+    line-height: 1.1;
+  }
+  .year-content { padding-left: 16px; gap: 10px; align-self: start; }
+  .year-marker {
+    /* Dot perfectly centers to match year label first-line height */
+    padding-top: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 3px;
+  }
+  .dot { width: 18px; height: 18px; }
+  .job-title { font-size: 1rem; }
+  .job-role { font-size: 0.82rem; }
+
+  /* Tools mobile */
+  .tools-gradient {
+    background: linear-gradient(180deg,
+      #000 0%,
+      #000 4%,
+      #555 12%,
+      #c8c8c8 22%,
+      #ffffff 32%,
+      #ffffff 68%,
+      #c8c8c8 78%,
+      #555 88%,
+      #000 96%,
+      #000 100%);
+  }
+  .tool-card { width: clamp(38px, 11vw, 64px); border-radius: 12px; }
+  .tools-row { gap: clamp(6px, 1.5vw, 12px); margin-bottom: 34px; }
+
+  /* Contents mobile — tight spacing, titles close to cards */
+  .scroll-section { height: 280vh; }
+  .sticky-stage { padding: 0; }
+  .sub-title { margin-bottom: 1.2vh; font-size: 1.4rem; }
+  .track-wrap { height: 54vh; }
+
+  /* Mobile text positions — pushed down so gap between text and cards is balanced */
+  .sticky-stage > .sub-title { top: clamp(60px, 10vh, 100px); }
+  .sticky-stage > .sub-desc  { top: calc(clamp(60px, 10vh, 100px) + clamp(40px, 5.5vh, 65px)); }
+  .sticky-stage > .sub-disclaimer { top: calc(clamp(60px, 10vh, 100px) + clamp(40px, 5.5vh, 65px) + clamp(56px, 7.5vh, 80px)); }
+
+  .card { width: 58vw; margin: 0 18px; }
+  .track.horizontal .card { width: 80vw; }
+  .card.is-left  { transform: scale(0.7) rotateY(18deg); }
+  .card.is-right { transform: scale(0.7) rotateY(-18deg); }
+
+  .edge { width: 18%; }
+
+  .sub-desc {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-top: 1.6vh;
+  }
+  .sub-disclaimer { font-size: 0.65rem; }
+
+  .footer { min-height: 44vh; }
+  .footer-gradient {
+    background: linear-gradient(180deg,
+      rgba(0,0,0,1) 0%,
+      rgba(60,60,60,1) 10%,
+      rgba(190,190,190,1) 28%,
+      #ffffff 55%,
+      #ffffff 100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* tool-card size is handled by clamp() above */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow { animation: none; opacity: 0.7; }
+  .fade-up { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+  .card, .card.is-left, .card.is-right { transform: scale(1) !important; }
+}
